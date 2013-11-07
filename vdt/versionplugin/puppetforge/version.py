@@ -31,32 +31,33 @@ def get_version(version_args):
     else:
         output = "\n".join(output)
 
+    version = None
+
     rubyyaml = RubyYaml(yaml)
     results = rubyyaml.load(output)
     log.debug(output)
-    
-    if len(results) > 1:
-        print "Too many results, pick one of:"
-        print "\n".join(["%(full_name)40s   %(desc)s" % result for result in results])
-        raise VersionError('Too many results.')
 
-    result = results[0]
-    version = None
+    if output.get('result') != 'success':
+        raise VersionError("No puppet module found with name %s, reason: %s" % (args.modulename, output.get('result')))
 
-    if args.version is not None:
-        versions = map(operator.itemgetter('version'), result['releases'])
-        log.debug("Available version: %s" % versions)
+    try:
+        result = (item for item in results.get('answers') if item.get('full_name') == args.modulename).next()
+        if args.version is not None:
+            versions = map(operator.itemgetter('version'), result['releases'])
+            log.debug("Available version: %s" % versions)
 
-        if args.version not in versions:
-            raise VersionNotFound("Version %s not found in %s. Available versions: %s" % (args.version, result['full_name'], versions))
+            if args.version not in versions:
+                raise VersionNotFound("Version %s not found in %s. Available versions: %s" % (args.version, result['full_name'], versions))
+            else:
+                version = Version(args.version, extra_args=version_args, userdata=result)
+
         else:
-            version = Version(args.version, extra_args=version_args, userdata=result)
+            version = Version(result['version'], extra_args=version_args, userdata=result)
 
-    else:
-        version = Version(result['version'], extra_args=version_args, userdata=result)
+        log.debug("Version is: %(version)s" % result)
+    except StopIteration:
+        raise VersionError("No puppet module found with name %s" % args.modulename)
 
-    log.debug("Version is: %(version)s" % result)
-    
     assert(version)
     return version
 
