@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 pkgname = "vdt.versionplugin.puppetforge"
 
 setup(name=pkgname,
-      version="0.1",
+      version="0.2",
       description="Version Increment Plugin that builds a package from a puppet module from puppet forge",
       author="Lars van de Kerkhof",
       author_email="lars@permanentmarkers.nl",

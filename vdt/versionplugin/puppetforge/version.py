@@ -10,7 +10,7 @@ import operator
 
 from vdt.version.shared import VersionError, VersionNotFound, Version
 
-from vdt.versionplugin.puppetforge.shared import parse_version_extra_args
+from vdt.versionplugin.puppetforge.shared import parse_version_extra_args, RubyYaml
 
 log = logging.getLogger('vdt.versionplugin.puppetmodule.version')
 
@@ -31,7 +31,8 @@ def get_version(version_args):
     else:
         output = "\n".join(output)
 
-    results = yaml.load(output)
+    rubyyaml = RubyYaml(yaml)
+    results = rubyyaml.load(output)
     log.debug(output)
     
     if len(results) > 1:
