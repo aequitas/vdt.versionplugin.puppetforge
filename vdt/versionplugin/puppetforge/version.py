@@ -26,7 +26,7 @@ def get_version(version_args):
     
     output = subprocess.check_output(cmd).split('\n')
 
-    if 'notice: Searching' in output[0]:
+    if 'otice: Searching' in output[0]:
         output = "\n".join(output[1:])
     else:
         output = "\n".join(output)
