@@ -37,7 +37,7 @@ def get_version(version_args):
     results = rubyyaml.load(output)
     log.debug(output)
 
-    if output.get('result') != 'success':
+    if results.get('result') != 'success':
         raise VersionError("No puppet module found with name %s, reason: %s" % (args.modulename, output.get('result')))
 
     try:
