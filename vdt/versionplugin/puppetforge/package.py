@@ -25,6 +25,7 @@ def build_package(version):
     try:
         # install the module
         cmd = ['puppet', 'module', 'install', args.modulename,
+                '--module_repository', 'https://forge.puppet.com',
                 '--target-dir=%s' % install_dir,
                 '--version=%s' % version]
         subprocess.check_call(cmd)
