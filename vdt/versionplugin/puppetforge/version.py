@@ -20,7 +20,7 @@ __all__ = ('get_version', 'set_version')
 
 def get_version(version_args):
     args, _ = parse_version_extra_args(version_args)
-    cmd = ['puppet', 'module', 'search', args.modulename, '--render-as=yaml']
+    cmd = ['puppet', 'module', 'search', '--module_repository', 'https://forge.puppet.com', args.modulename, '--render-as=yaml']
     
     log.debug("Running command: %s" % " ".join(cmd))
     
